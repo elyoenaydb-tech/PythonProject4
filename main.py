@@ -49,6 +49,7 @@ import pagamento
 import seguranca
 import modulo_compartilhamento as compartilhamento
 
+
 ctk.set_appearance_mode("light")
 
 EMAIL_REGEX = re.compile(r'^[\w.\-]+@[\w.\-]+\.\w+$')
@@ -76,6 +77,15 @@ class ServiceCleanApp(ctk.CTk):
 
         self.exibir_login()
 
+    def exibir_cadastro_profissional(self):
+        """Remove a tela atual e exibe o formulário de cadastro de profissional."""
+        self.limpar_tela()
+
+        # Importa o arquivo isolado somente quando clica no botão
+        import cadastro_profissional
+
+        self.tela_atual = cadastro_profissional.TelaCadastroProfissional(parent=self.container, controller=self)
+        self.tela_atual.pack(fill="both", expand=True)
     # ------------------------------------------------------------------ #
     # Utilidades de navegação
     # ------------------------------------------------------------------ #
@@ -129,6 +139,11 @@ class ServiceCleanApp(ctk.CTk):
         ctk.CTkButton(self.container, text="Não tem uma conta? Cadastre-se",
                       font=ctk.CTkFont(size=13), text_color="#555555", fg_color="transparent",
                       hover_color=config.COR_HOVER_CLARO, command=self.exibir_cadastro).pack(pady=(15, 0))
+
+        ctk.CTkButton(self.container, text="Trabalhar como Profissional (Cadastrar)",
+                      font=ctk.CTkFont(size=13), text_color="#555555",
+                      hover_color=config.COR_HOVER_CLARO, fg_color="transparent",
+                      command=self.exibir_cadastro_profissional).pack(pady=10)
 
         self._preencher_usuario_lembrado()
 
@@ -591,6 +606,15 @@ class ServiceCleanApp(ctk.CTk):
             ctk.CTkLabel(card, text=f"Status: {ag['status']}",
                          font=ctk.CTkFont(size=12, weight="bold"), text_color=cor_status
                          ).pack(anchor="w", padx=15, pady=(0, 10))
+            btn_profissional = ctk.CTkButton(
+                self,
+                text="Trabalhar como Profissional (Cadastrar)",
+                command=lambda: self.controller.exibir_cadastro_profissional(),
+                fg_color="transparent",
+                text_color="#5a4a42",
+                hover_color="#e0e0e0"
+            )
+            btn_profissional.pack(pady=10)
 
 
 if __name__ == "__main__":
